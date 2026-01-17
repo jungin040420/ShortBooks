@@ -15,7 +15,23 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "ShortBook.db", nul
         //insertSample(db, "뿌리 깊은 나무는...", "용비어천가", "정인지 등", "https://naver.com", "심지가 굳은 사람이 되고 싶게 만드는 구절이네요.")
     }
 
-    private fun insertSample(db: SQLiteDatabase, content: String, title: String, author: String, link: String, review: String) {
+    //샘플 출력용 함수, 후에 카드 등록 -> 출력 (사용하지 않을 함수)
+    /*private fun insertSample(db: SQLiteDatabase, content: String, title: String, author: String, link: String, review: String) {
+        val values = ContentValues().apply {
+            put("content", content)
+            put("title", title)
+            put("author", author)
+            put("link", link)
+            put("review", review)
+        }
+        db.insert("Books", null, values)
+    }*/
+
+    override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {}
+
+    //카드 등록 출력 함수 (현재 카드 등록 페이지 생성 X)
+    fun addCard(content: String, title: String, author: String, link: String, review: String) {
+        val db = this.writableDatabase
         val values = ContentValues().apply {
             put("content", content)
             put("title", title)
@@ -25,8 +41,6 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "ShortBook.db", nul
         }
         db.insert("Books", null, values)
     }
-
-    override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {}
 
     fun updateFavorite(id: Int, isFav: Int) {
         writableDatabase.execSQL("UPDATE Books SET is_favorite = $isFav WHERE id = $id")
