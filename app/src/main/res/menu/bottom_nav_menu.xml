@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/nav_library" android:icon="@android:drawable/ic_menu_agenda" android:title="내 서재" />
-    <item android:id="@+id/nav_collection" android:icon="@android:drawable/ic_menu_search" android:title="문장 수집" />
-    <item android:id="@+id/nav_mypage" android:icon="@android:drawable/ic_lock_lock" android:title="마이페이지" />
+
+    <item
+        android:id="@+id/menu_library"
+        android:icon="@drawable/ic_book"
+        android:title="내 서재" />
+
+    <item
+        android:id="@+id/menu_text"
+        android:icon="@drawable/ic_text"
+        android:title="문장 수집" />
+
+    <item
+        android:id="@+id/menu_mypage"
+        android:icon="@drawable/ic_profile"
+        android:title="마이페이지" />
 </menu>

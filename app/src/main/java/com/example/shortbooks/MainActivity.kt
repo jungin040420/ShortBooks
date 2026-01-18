@@ -9,23 +9,33 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        // XML의 ID와 동일한지 확인하세요: @id/bottom_navigation
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_navigation)
-
-        // 앱 시작 시 첫 화면 표시
-        if (savedInstanceState == null) {
-            supportFragmentManager.beginTransaction()
-                .replace(R.id.main_container, CollectionFragment())
-                .commit()
-        }
 
         bottomNav.setOnItemSelectedListener { item ->
             when (item.itemId) {
-                R.id.nav_collection -> {
-                    supportFragmentManager.beginTransaction().replace(R.id.main_container, CollectionFragment()).commit()
+                R.id.menu_text -> {
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.menu_text, CollectionFragment()).commit()
                     true
                 }
-                else -> true
+                R.id.menu_library -> {
+                    // '내 서재' 클릭 시 LibraryFragment로 이동
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.menu_library, LibraryFragment()).commit()
+                    true
+                }
+                R.id.menu_mypage -> {
+                    supportFragmentManager.beginTransaction()
+                        .replace(R.id.menu_mypage, MyPageFragment()).commit()
+                    true
+                }
+                else -> false
             }
+        }
+
+        if (savedInstanceState == null) {
+            bottomNav.selectedItemId = R.id.menu_text
         }
     }
 }
