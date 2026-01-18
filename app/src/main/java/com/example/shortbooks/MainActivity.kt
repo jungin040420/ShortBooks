@@ -9,25 +9,24 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // XML의 ID와 동일한지 확인하세요: @id/bottom_navigation
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_navigation)
 
         bottomNav.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.menu_text -> {
                     supportFragmentManager.beginTransaction()
-                        .replace(R.id.menu_text, CollectionFragment()).commit()
+                        .replace(R.id.fragment_container, CollectionFragment()).commit()
                     true
                 }
                 R.id.menu_library -> {
                     // '내 서재' 클릭 시 LibraryFragment로 이동
                     supportFragmentManager.beginTransaction()
-                        .replace(R.id.menu_library, LibraryFragment()).commit()
+                        .replace(R.id.fragment_container, LibraryFragment()).commit()
                     true
                 }
                 R.id.menu_mypage -> {
                     supportFragmentManager.beginTransaction()
-                        .replace(R.id.menu_mypage, MyPageFragment()).commit()
+                        .replace(R.id.fragment_container, MyPageFragment()).commit()
                     true
                 }
                 else -> false
