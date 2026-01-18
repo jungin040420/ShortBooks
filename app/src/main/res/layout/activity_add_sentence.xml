@@ -130,7 +130,7 @@
                 android:textStyle="bold" />
 
             <EditText
-                android:id="@+id/etReview"
+                android:id="@+id/etComment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:minHeight="100dp"

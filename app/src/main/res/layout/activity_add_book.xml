@@ -30,6 +30,7 @@
                 android:text="완료"
                 android:layout_alignParentEnd="true"
                 android:textColor="#000000"
+                android:padding="5dp"
                 android:textStyle="bold" />
         </RelativeLayout>
 
@@ -54,15 +55,34 @@
                 android:src="@android:drawable/ic_input_add" />
         </FrameLayout>
 
-        <EditText
-            android:id="@+id/et_search"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginTop="20dp"
-            android:background="@android:drawable/editbox_background"
-            android:hint="도서를 검색해보세요."
-            android:padding="12dp"
-            android:drawableEnd="@android:drawable/ic_menu_search" />
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical"
+            android:layout_marginTop="20dp">
+
+            <EditText
+                android:id="@+id/et_search"
+                android:layout_width="0dp"
+                android:layout_height="50dp"
+                android:layout_weight="1"
+                android:background="@android:drawable/editbox_background"
+                android:hint="도서를 검색해보세요."
+                android:padding="12dp"
+                android:imeOptions="actionSearch"
+                android:inputType="text" />
+
+            <ImageView
+                android:id="@+id/iv_search_icon"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginStart="8dp"
+                android:padding="10dp"
+                android:src="@android:drawable/ic_menu_search"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="검색 아이콘" />
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -82,7 +102,6 @@
                 android:layout_height="wrap_content"
                 android:background="@null"
                 android:hint="제목 입력" />
-
         </LinearLayout>
 
         <LinearLayout
@@ -103,7 +122,6 @@
                 android:layout_height="wrap_content"
                 android:background="@null"
                 android:hint="저자 입력" />
-
         </LinearLayout>
 
         <LinearLayout
@@ -146,7 +164,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingTop="20dp">
+            android:paddingTop="20dp"
+            android:gravity="center_vertical">
 
             <TextView
                 android:layout_width="100dp"
@@ -156,9 +175,8 @@
 
             <androidx.appcompat.widget.SwitchCompat
                 android:id="@+id/sw_reading"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingStart="10dp" />
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
         </LinearLayout>
 
@@ -170,7 +188,7 @@
             android:textStyle="bold" />
 
         <EditText
-            android:id="@+id/et_review"
+            android:id="@+id/etReview"
             android:layout_width="match_parent"
             android:layout_height="120dp"
             android:layout_marginTop="10dp"

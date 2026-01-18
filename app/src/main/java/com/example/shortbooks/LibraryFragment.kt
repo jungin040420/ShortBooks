@@ -12,9 +12,9 @@ import androidx.recyclerview.widget.RecyclerView
  */
 class LibraryFragment : Fragment(R.layout.fragment_library) {
 
-    // 클래스 전체에서 사용할 수 있도록 변수를 밖으로 뺍니다.
     private lateinit var dbHelper: DBHelper
     private lateinit var bookAdapter: BookAdapter
+    private lateinit var recyclerView: RecyclerView
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -22,16 +22,9 @@ class LibraryFragment : Fragment(R.layout.fragment_library) {
         // DB 헬퍼 초기화
         dbHelper = DBHelper(requireContext())
 
-        // 초기 데이터 로드
-        val bookList = dbHelper.getAllData()
-
-        // 리사이클러뷰 참조 및 설정
-        val recyclerView = view.findViewById<RecyclerView>(R.id.rv_library)
+        // 리사이클러뷰 참조 및 격자 레이아웃(3열) 설정
+        recyclerView = view.findViewById(R.id.rv_library)
         recyclerView.layoutManager = GridLayoutManager(context, 3)
-
-        // 어댑터 연결 (클래스 변수 bookAdapter에 할당)
-        bookAdapter = BookAdapter(bookList)
-        recyclerView.adapter = bookAdapter
 
         // 도서 추가 버튼 설정
         val btnAdd = view.findViewById<View>(R.id.btn_add_book)
@@ -39,17 +32,32 @@ class LibraryFragment : Fragment(R.layout.fragment_library) {
             val intent = Intent(requireContext(), AddBookActivity::class.java)
             startActivity(intent)
         }
+
+        // 초기 데이터 로드
+        refreshBooks()
     }
 
-    // 중요: onResume은 onViewCreated 바깥에(클래스 바로 아래) 있어야 합니다.
+    /**
+     * 화면이 다시 보일 때마다 도서 목록 새로고침
+     */
     override fun onResume() {
         super.onResume()
+        refreshBooks()
+    }
 
-        // 1. DB에서 최신 리스트 가져오기
-        val newList = dbHelper.getAllData()
+    /**
+     * 도서 전용 데이터를 로드하여 어댑터 갱신
+     */
+    private fun refreshBooks() {
+        // [수정] getAllData 대신 도서 전용 함수인 getAllBooks 사용
+        // 이로써 문장만 추가된 데이터가 서재에 중복으로 뜨는 현상 방지
+        val bookList = dbHelper.getAllBooks()
 
-        // 2. 어댑터에 데이터 갱신 알리기
-        bookAdapter.setData(newList)
+        // 어댑터 생성 및 연결
+        bookAdapter = BookAdapter(bookList)
+        recyclerView.adapter = bookAdapter
+
+        // 데이터 변경 알림
         bookAdapter.notifyDataSetChanged()
     }
 }

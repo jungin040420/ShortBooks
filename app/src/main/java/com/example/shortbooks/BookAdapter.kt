@@ -1,5 +1,6 @@
 package com.example.shortbooks
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,8 +23,16 @@ class BookAdapter(private var bookList: List<BookItem>) :
 
     override fun onBindViewHolder(holder: BookViewHolder, position: Int) {
         val book = bookList[position]
-        // 제목 설정 코드를 삭제하여 이미지만 표시
+
         Glide.with(holder.itemView.context).load(book.image).into(holder.image)
+
+        //이미지 클릭 시 문장 추가 화면으로 이동
+        holder.itemView.setOnClickListener {
+            val intent = Intent(holder.itemView.context, AddSentenceActivity::class.java)
+            intent.putExtra("BOOK_TITLE", book.title)
+            intent.putExtra("BOOK_AUTHOR", book.author)
+            holder.itemView.context.startActivity(intent)
+        }
     }
 
     override fun getItemCount(): Int = bookList.size

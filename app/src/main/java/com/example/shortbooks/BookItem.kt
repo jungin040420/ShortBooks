@@ -10,7 +10,8 @@ data class BookItem(
     val content: String,    // 책 구절 (카드용)
     val image: String,      // 도서 표지 이미지 URL 또는 경로
     val link: String,       // 상세 링크
-    val review: String,     // 한줄평
+    val comment: String,    // 한 줄 평
+    val review: String,     // 한 줄 독후감
     val startDate: String,  // 읽기 시작한 날
     val endDate: String,    // 다 읽은 날
     val isReading: Int,     // 읽는 중 여부 (0: 다읽음, 1: 읽는중)

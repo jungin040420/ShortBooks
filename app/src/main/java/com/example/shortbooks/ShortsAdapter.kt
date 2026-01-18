@@ -9,73 +9,77 @@ import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
 
 /**
- * 책의 요약 내용(Shorts) 리스트를 화면에 표시하기 위한 어댑터
- * @param list 표시할 책 데이터 리스트
- * @param db 즐겨찾기 상태를 저장하기 위한 데이터베이스 헬퍼 객체
+ * 문장 수집 콘텐츠 표시 어댑터
  */
-class ShortsAdapter(private val list: List<BookItem>, private val db: DBHelper) : RecyclerView.Adapter<ShortsAdapter.ViewHolder>() {
+class ShortsAdapter(private val list: List<BookItem>, private val db: DBHelper) :
+    RecyclerView.Adapter<ShortsAdapter.ViewHolder>() {
 
-    // 각 아이템 뷰의 구성 요소들을 저장하는 홀더 클래스
+    // 뷰 객체 참조 홀더
     class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val tvContent: TextView = view.findViewById(R.id.tvContent)   // 책 본문 요약
-        val tvReview: TextView = view.findViewById(R.id.tvReview)     // 한줄평(기본 invisible)
-        val tvTitle: TextView = view.findViewById(R.id.tvTitle)       // 책 제목
-        val tvAuthor: TextView = view.findViewById(R.id.tvAuthor)     // 저자 이름
-        val btnQuote: ImageButton = view.findViewById(R.id.btnQuote)   // 한줄평 보기 버튼
-        val btnFavorite: ImageView = view.findViewById(R.id.btnFavorite) // 즐겨찾기(별) 버튼
-        val btnBuy: ImageButton = view.findViewById(R.id.btnBuy)       // 구매 링크 버튼
+        val tvContent: TextView = view.findViewById(R.id.tvContent)     // 문장 내용
+        val tvComment: TextView = view.findViewById(R.id.tvReview)      // 카드용 한줄평 (ID 유지)
+        val tvTitle: TextView = view.findViewById(R.id.tvTitle)         // 도서 제목
+        val tvAuthor: TextView = view.findViewById(R.id.tvAuthor)       // 저자 이름
+        val btnQuote: ImageButton = view.findViewById(R.id.btnQuote)    // 보기 전환 버튼
+        val btnFavorite: ImageView = view.findViewById(R.id.btnFavorite) // 즐겨찾기 버튼
+        val btnBuy: ImageButton = view.findViewById(R.id.btnBuy)         // 구매 연결 버튼
     }
 
-    // 레이아웃 파일을 인플레이트하여 뷰홀더 생성
+    // 아이템 뷰 생성
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = ViewHolder(
         LayoutInflater.from(parent.context).inflate(R.layout.item_short, parent, false)
     )
 
-    // 각 위치(position)의 데이터를 뷰에 결합(Binding)
+    // 데이터 결합 처리
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = list[position]
 
-        // 1. 텍스트 데이터 설정: UI 요소에 책 정보 반영
+        // 텍스트 데이터 바인딩
         holder.tvContent.text = item.content
-        holder.tvReview.text = item.review
         holder.tvTitle.text = item.title
         holder.tvAuthor.text = item.author
+        holder.tvComment.text = item.comment
 
-        // 2. 초기 즐겨찾기 상태 설정: DB 값(0 또는 1)에 따라 별 모양 아이콘 설정
+        // 즐겨찾기 초기 아이콘 설정
         if (item.isFavorite == 1) {
-            holder.btnFavorite.setImageResource(R.drawable.ic_blackstar) // 채워진 별
+            holder.btnFavorite.setImageResource(R.drawable.ic_blackstar)
         } else {
-            holder.btnFavorite.setImageResource(R.drawable.ic_star)      // 빈 별
+            holder.btnFavorite.setImageResource(R.drawable.ic_star)
         }
 
-        // 3. 한줄평(따옴표 버튼) 클릭 이벤트: 한줄평 레이아웃을 보이거나 숨김(Toggle)
+        // [수정] 따옴표 버튼 클릭 이벤트: 카드용 한줄평(Comment)만 토글
         holder.btnQuote.setOnClickListener {
-            if (holder.tvReview.visibility == View.INVISIBLE) {
-                holder.tvReview.visibility = View.VISIBLE
+            // Comment가 숨겨져 있으면 보이게, 보이고 있으면 숨김 처리
+            if (holder.tvComment.visibility == View.INVISIBLE) {
+                holder.tvComment.visibility = View.VISIBLE
             } else {
-                holder.tvReview.visibility = View.INVISIBLE
+                holder.tvComment.visibility = View.INVISIBLE
             }
         }
 
-        // 4. 즐겨찾기 버튼 클릭 이벤트: 클릭 시 상태 전환(0<->1), DB 업데이트 및 아이콘 교체
+        // 즐겨찾기 상태 변경 및 DB 업데이트
         holder.btnFavorite.setOnClickListener {
-            item.isFavorite = if (item.isFavorite == 0) 1 else 0 // 상태 반전
-            db.updateFavorite(item.id, item.isFavorite)          // 로컬 DB 반영
+            val newStatus = if (item.isFavorite == 0) 1 else 0
+            db.updateFavorite(item.id, newStatus)
 
-            if (item.isFavorite == 1) {
+            if (newStatus == 1) {
                 holder.btnFavorite.setImageResource(R.drawable.ic_blackstar)
             } else {
                 holder.btnFavorite.setImageResource(R.drawable.ic_star)
             }
         }
 
-        // 5. 구매 아이콘 클릭 이벤트: 외부 브라우저를 통해 책 구매 링크로 이동
+        // 구매 링크 연결
         holder.btnBuy.setOnClickListener {
-            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(item.link))
-            holder.itemView.context.startActivity(intent)
+            if (!item.link.isNullOrEmpty()) {
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(item.link))
+                holder.itemView.context.startActivity(intent)
+            } else {
+                Toast.makeText(holder.itemView.context, "구매 링크가 없습니다.", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
-    // 전체 아이템 개수 반환
+    // 목록 크기 반환
     override fun getItemCount() = list.size
 }

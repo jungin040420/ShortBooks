@@ -1,6 +1,7 @@
 package com.example.shortbooks
 
 import android.os.Bundle
+import android.view.MotionEvent
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
@@ -24,26 +25,36 @@ class AddBookActivity : AppCompatActivity() {
         setContentView(R.layout.activity_add_book)
 
         // 화면 뷰 참조
-        val etSearch = findViewById<EditText>(R.id.et_search) // 검색창
+        val etSearch = findViewById<EditText>(R.id.et_search)
         val etTitle = findViewById<EditText>(R.id.et_title)
         val etAuthor = findViewById<EditText>(R.id.et_author)
         val etStartDate = findViewById<EditText>(R.id.et_start_date)
         val etEndDate = findViewById<EditText>(R.id.et_end_date)
         val swReading = findViewById<SwitchCompat>(R.id.sw_reading)
-        val etReview = findViewById<EditText>(R.id.et_review)
+        val etReview = findViewById<EditText>(R.id.etReview)
         val btnComplete = findViewById<TextView>(R.id.btn_complete)
         val ivBookCover = findViewById<ImageView>(R.id.iv_book_cover)
         val ivPlusIcon = findViewById<ImageView>(R.id.iv_plus_icon)
+        val ivSearchIcon = findViewById<ImageView>(R.id.iv_search_icon)
 
         // 1. 네이버 검색창 이벤트 설정 (키보드 엔터키 클릭 시)
         etSearch.setOnEditorActionListener { v, _, _ ->
-            val query = v.text.toString()
+            val query = v.text.toString().trim()
             if (query.isNotEmpty()) {
-                searchNaverBook(query)
+                searchNaverBook(query) // 네이버 검색 함수 호출
             }
             true
         }
 
+        // 2. 돋보기 버튼 클릭 시 검색
+        ivSearchIcon.setOnClickListener {
+            val query = etSearch.text.toString().trim()
+            if (query.isNotEmpty()) {
+                searchNaverBook(query)
+            } else {
+                Toast.makeText(this, "검색어를 입력해주세요.", Toast.LENGTH_SHORT).show()
+            }
+        }
         // 2. 완료 버튼 클릭 리스너 (DB 저장 로직)
         btnComplete.setOnClickListener {
             val title = etTitle.text.toString()
