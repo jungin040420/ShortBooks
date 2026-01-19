@@ -17,7 +17,7 @@
         <ImageView
             android:id="@+id/iv_list_book_image"
             android:layout_width="80dp"
-            android:layout_height="100dp"
+            android:layout_height="120dp"
             android:scaleType="centerCrop"
             android:background="#EEEEEE"
             android:contentDescription="책 표지 이미지" />
