@@ -3,6 +3,8 @@ package com.example.shortbooks
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
+import android.widget.ImageView
+import android.widget.PopupMenu
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -25,6 +27,26 @@ class LibraryFragment : Fragment(R.layout.fragment_library) {
         // 리사이클러뷰 참조 및 격자 레이아웃(3열) 설정
         recyclerView = view.findViewById(R.id.rv_library)
         recyclerView.layoutManager = GridLayoutManager(context, 3)
+
+        // 메뉴 아이콘 클릭 시 리스트 메뉴 표시
+        val ivMenu = view.findViewById<ImageView>(R.id.iv_menu)
+        // LibraryFragment.kt 내 ivMenu 클릭 리스너
+        ivMenu.setOnClickListener { v ->
+            val popup = PopupMenu(requireContext(), v)
+            popup.menuInflater.inflate(R.menu.menu_library, popup.menu)
+            popup.setOnMenuItemClickListener { item ->
+                when (item.itemId) {
+                    R.id.action_my_sentences -> {
+                        // 내 문장 액티비티로 이동
+                        val intent = Intent(requireContext(), MySentencesActivity::class.java)
+                        startActivity(intent)
+                        true
+                    }
+                    else -> false
+                }
+            }
+            popup.show()
+        }
 
         // 도서 추가 버튼 설정
         val btnAdd = view.findViewById<View>(R.id.btn_add_book)

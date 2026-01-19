@@ -31,6 +31,8 @@ class BookAdapter(private var bookList: List<BookItem>) :
             val intent = Intent(holder.itemView.context, AddSentenceActivity::class.java)
             intent.putExtra("BOOK_TITLE", book.title)
             intent.putExtra("BOOK_AUTHOR", book.author)
+            intent.putExtra("BOOK_IMAGE", book.image)
+            intent.putExtra("BOOK_LINK", book.link)
             holder.itemView.context.startActivity(intent)
         }
     }

@@ -23,6 +23,8 @@ class AddSentenceActivity : AppCompatActivity() {
         // 데이터 수신: Intent 전달 값 처리
         val bookTitle = intent.getStringExtra("BOOK_TITLE")
         val bookAuthor = intent.getStringExtra("BOOK_AUTHOR")
+        val bookImage = intent.getStringExtra("BOOK_IMAGE")
+        val bookLink = intent.getStringExtra("BOOK_LINK")
         if (bookTitle != null) {
             etBookTitle.setText(bookTitle) // 자동 입력
         }
@@ -36,11 +38,18 @@ class AddSentenceActivity : AppCompatActivity() {
             // 유효성 검사: 제목과 문장이 모두 있을 때만 저장
             if (title.isNotEmpty() && content.isNotEmpty()) {
 
-                // 데이터베이스 저장: (문장내용, 제목, 작가, 링크, 한줄평)
-                dbHelper.addCard(content, title, bookAuthor ?: "작가 미상", "", comment)
+                // 데이터베이스 저장
+                dbHelper.addCard(
+                    content,
+                    title,
+                    bookAuthor ?: "작가 미상",
+                    bookLink ?: "",
+                    comment,
+                    bookImage ?: ""
+                )
 
                 // 알림 및 화면 종료
-                Toast.makeText(this, "문장이 수집되었습니다!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "문장이 수집 완료!", Toast.LENGTH_SHORT).show()
                 finish()
             } else {
                 // 경고 알림
