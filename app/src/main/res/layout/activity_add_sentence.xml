@@ -34,7 +34,7 @@
         android:layout_height="60dp"
         android:layout_alignParentBottom="true"
         android:layout_margin="20dp"
-        android:backgroundTint="#333333"
+        android:backgroundTint="#6378EF"
         android:text="문장 수집 완료"
         android:textColor="#FFFFFF"
         android:textSize="18sp"

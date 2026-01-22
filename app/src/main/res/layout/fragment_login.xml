@@ -27,7 +27,7 @@
     <EditText android:id="@+id/etLoginPw" android:layout_width="match_parent" android:layout_height="50dp" android:hint="비밀번호를 입력해 주세요." android:inputType="textPassword" android:background="@android:color/transparent" />
     <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#EEEEEE" />
 
-    <Button android:id="@+id/btnLoginSubmit" android:layout_width="match_parent" android:layout_height="55dp" android:layout_marginTop="40dp" android:backgroundTint="#333333" android:text="로그인" />
+    <Button android:id="@+id/btnLoginSubmit" android:layout_width="match_parent" android:layout_height="55dp" android:layout_marginTop="40dp" android:backgroundTint="#6378EF" android:text="로그인" />
 
     <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_gravity="center" android:layout_marginTop="20dp">
         <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="아이디 찾기" android:textSize="12sp" android:textColor="#888888"/>
