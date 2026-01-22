@@ -22,7 +22,7 @@ class MyPageFragment : Fragment(R.layout.fragment_mypage) {
         super.onViewCreated(view, savedInstanceState)
         _binding = FragmentMypageBinding.bind(view)
 
-        // 사용자 정보 설정 (세션 정보 반영)
+        // [명사형 주석: 유저 정보 및 로그아웃 설정]
         val sharedPref = requireActivity().getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
         val isLoggedIn = sharedPref.getBoolean("is_logged_in", false)
         val userName = sharedPref.getString("user_name", "로그인이 필요합니다")
@@ -39,41 +39,42 @@ class MyPageFragment : Fragment(R.layout.fragment_mypage) {
             }
         }
 
+        // [명사형 주석: 메뉴 클릭 리스너]
+        binding.menuSettings.setOnClickListener {
+            parentFragmentManager.beginTransaction().replace(R.id.fragment_container, MyInfoFragment()).addToBackStack(null).commit()
+        }
+
+        binding.menuLanguage.setOnClickListener {
+            showLanguageSelectionDialog()
+        }
+
         initCalendar()
     }
 
     private fun initCalendar() {
         val currentMonth = YearMonth.now()
-        val dbHelper = DBHelper(requireContext()) // [명사형 주석: DB 헬퍼 초기화]
+        val dbHelper = DBHelper(requireContext())
 
-        // 초기 헤더 설정
         binding.tvCalendarHeader.text = "${currentMonth.year}년 ${currentMonth.monthValue}월"
 
-        // 날짜 바인딩 설정
         binding.calendarView.dayBinder = object : MonthDayBinder<DayViewContainer> {
             override fun create(view: View) = DayViewContainer(view)
             override fun bind(container: DayViewContainer, day: CalendarDay) {
-                // 1. 기본 날짜 텍스트 설정
                 container.textView.text = day.date.dayOfMonth.toString()
 
-                // 2. 이번 달 날짜인 경우에만 로직 적용
                 if (day.position == DayPosition.MonthDate) {
                     container.textView.alpha = 1.0f
-
-                    // 3. DB 확인 (yyyy-MM-dd 형식 문자열로 변환)
                     val dateString = day.date.toString()
 
+                    // [명사형 주석: DB 조회 및 달력 배경 설정]
                     if (dbHelper.hasDataAtDate(dateString)) {
-                        // [명사형 주석: 데이터 존재 시 배경 및 글자색 변경]
                         container.textView.setBackgroundResource(R.drawable.bg_calendar_attendance)
-                        container.textView.setTextColor(Color.WHITE) // 흰색 글자로 가독성 향상
+                        container.textView.setTextColor(Color.WHITE)
                     } else {
-                        // [명사형 주석: 데이터 없을 시 기본 상태]
                         container.textView.background = null
                         container.textView.setTextColor(Color.BLACK)
                     }
                 } else {
-                    // [명사형 주석: 다른 달 날짜 투명 처리]
                     container.textView.alpha = 0.3f
                     container.textView.background = null
                     container.textView.setTextColor(Color.GRAY)
@@ -81,23 +82,52 @@ class MyPageFragment : Fragment(R.layout.fragment_mypage) {
             }
         }
 
-        // 달력 범위 및 시작 위치 설정
         binding.calendarView.setup(currentMonth.minusMonths(12), currentMonth.plusMonths(12), DayOfWeek.SUNDAY)
         binding.calendarView.scrollToMonth(currentMonth)
-
-        // 스크롤 시 상단 연/월 업데이트
-        binding.calendarView.monthScrollListener = { month ->
-            binding.tvCalendarHeader.text = "${month.yearMonth.year}년 ${month.yearMonth.monthValue}월"
-        }
     }
 
-    // 내부 컨테이너 클래스 (뷰 홀더)
-    inner class DayViewContainer(view: View) : ViewContainer(view) {
-        val textView: TextView = view.findViewById(R.id.calendarDayText) // XML 아이디 일치 확인
+    private fun showLanguageSelectionDialog() {
+        val bottomSheet = com.google.android.material.bottomsheet.BottomSheetDialog(requireContext())
+        val dialogView = layoutInflater.inflate(R.layout.layout_language_selection, null)
+        bottomSheet.setContentView(dialogView)
+
+        // [명사형 주석: 언어 버튼 참조 - findViewById 오타 수정]
+        val btnKorean = dialogView.findViewById<View>(R.id.btnKorean)
+        val btnEnglish = dialogView.findViewById<View>(R.id.btnEnglish)
+        val btnJapanese = dialogView.findViewById<View>(R.id.btnJapanese)
+        val tvKorean = dialogView.findViewById<TextView>(R.id.tvKorean)
+        val tvEnglish = dialogView.findViewById<TextView>(R.id.tvEnglish)
+        val tvJapanese = dialogView.findViewById<TextView>(R.id.tvJapanese)
+
+        // [명사형 주석: 선택 상태 업데이트 함수]
+        fun updateSelection(selected: String) {
+            val selectedBg = R.drawable.bg_language_selected
+            val unselectedBg = R.drawable.bg_language_unselected
+
+            btnKorean.setBackgroundResource(if (selected == "ko") selectedBg else unselectedBg)
+            tvKorean.setTextColor(if (selected == "ko") Color.WHITE else Color.BLACK)
+
+            btnEnglish.setBackgroundResource(if (selected == "en") selectedBg else unselectedBg)
+            tvEnglish.setTextColor(if (selected == "en") Color.WHITE else Color.BLACK)
+
+            btnJapanese.setBackgroundResource(if (selected == "ja") selectedBg else unselectedBg)
+            tvJapanese.setTextColor(if (selected == "ja") Color.WHITE else Color.BLACK)
+        }
+
+        btnKorean.setOnClickListener { updateSelection("ko") }
+        btnEnglish.setOnClickListener { updateSelection("en") }
+        btnJapanese.setOnClickListener { updateSelection("ja") }
+
+        bottomSheet.show()
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
+}
+
+// [명사형 주석: 캘린더 뷰 홀더 - inner 삭제로 에러 해결]
+class DayViewContainer(view: View) : ViewContainer(view) {
+    val textView: TextView = view.findViewById(R.id.calendarDayText)
 }
