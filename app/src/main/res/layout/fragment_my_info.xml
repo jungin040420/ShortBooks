@@ -80,19 +80,6 @@
                 android:layout_height="1dp"
                 android:background="#F0F0F0" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="55dp"
-                android:gravity="center_vertical"
-                android:text="관심사 태그 관리"
-                android:textColor="#333333"
-                android:textSize="16sp" />
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#F0F0F0" />
-
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
