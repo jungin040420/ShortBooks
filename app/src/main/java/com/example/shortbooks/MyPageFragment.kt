@@ -53,8 +53,9 @@ class MyPageFragment : Fragment(R.layout.fragment_mypage) {
 
     private fun initCalendar() {
         val currentMonth = YearMonth.now()
-        val dbHelper = DBHelper(requireContext())
+        val dbHelper = DBHelper(requireContext()) // [명사형 주석: DB 헬퍼 초기화]
 
+        // 초기 헤더 설정
         binding.tvCalendarHeader.text = "${currentMonth.year}년 ${currentMonth.monthValue}월"
 
         binding.calendarView.dayBinder = object : MonthDayBinder<DayViewContainer> {
@@ -66,7 +67,7 @@ class MyPageFragment : Fragment(R.layout.fragment_mypage) {
                     container.textView.alpha = 1.0f
                     val dateString = day.date.toString()
 
-                    // [명사형 주석: DB 조회 및 달력 배경 설정]
+                    // [명사형 주석: DB 조회 및 데이터 존재 시 배경 설정]
                     if (dbHelper.hasDataAtDate(dateString)) {
                         container.textView.setBackgroundResource(R.drawable.bg_calendar_attendance)
                         container.textView.setTextColor(Color.WHITE)
@@ -82,8 +83,16 @@ class MyPageFragment : Fragment(R.layout.fragment_mypage) {
             }
         }
 
+        // 달력 범위 및 시작 위치 설정
         binding.calendarView.setup(currentMonth.minusMonths(12), currentMonth.plusMonths(12), DayOfWeek.SUNDAY)
         binding.calendarView.scrollToMonth(currentMonth)
+
+        // [명사형 주석: 달력 스크롤 시 상단 연/월 텍스트 동기화]
+        binding.calendarView.monthScrollListener = { month ->
+            val year = month.yearMonth.year
+            val monthValue = month.yearMonth.monthValue
+            binding.tvCalendarHeader.text = "${year}년 ${monthValue}월"
+        }
     }
 
     private fun showLanguageSelectionDialog() {
