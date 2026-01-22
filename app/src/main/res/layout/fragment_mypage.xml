@@ -86,19 +86,7 @@
                         android:textStyle="bold"
                         android:textColor="#6378EF" />
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:paddingBottom="8dp">
-                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="일" android:gravity="center" android:textColor="#FF7D7D" android:textSize="12sp" android:textStyle="bold"/>
-                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="월" android:gravity="center" android:textSize="12sp" />
-                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="화" android:gravity="center" android:textSize="12sp" />
-                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="수" android:gravity="center" android:textSize="12sp" />
-                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="목" android:gravity="center" android:textSize="12sp" />
-                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="금" android:gravity="center" android:textSize="12sp" />
-                        <TextView android:layout_width="0dp" android:layout_height="wrap_content" android:layout_weight="1" android:text="토" android:gravity="center" android:textColor="#7D8AFF" android:textSize="12sp" android:textStyle="bold" />
-                    </LinearLayout>
+                    <include layout="@layout/calendar_header_layout" />
 
                     <com.kizitonwose.calendar.view.CalendarView
                         android:id="@+id/calendarView"
@@ -113,13 +101,51 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:orientation="vertical">
-                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#EEEEEE"/>
-                <TextView android:id="@+id/menuSettings" android:layout_width="match_parent" android:layout_height="60dp" android:gravity="center_vertical" android:text="⚙️  내 정보" android:paddingStart="10dp"/>
-                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#EEEEEE"/>
-                <TextView android:id="@+id/menuLanguage" android:layout_width="match_parent" android:layout_height="60dp" android:gravity="center_vertical" android:text="🌐  언어" android:paddingStart="10dp"/>
-                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#EEEEEE"/>
-                <TextView android:id="@+id/menuSupport" android:layout_width="match_parent" android:layout_height="60dp" android:gravity="center_vertical" android:text="🎧  고객센터" android:paddingStart="10dp"/>
-                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#EEEEEE"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#EEEEEE"/>
+
+                <TextView
+                    android:id="@+id/menuSettings"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:gravity="center_vertical"
+                    android:text="⚙️  내 정보"
+                    android:paddingStart="10dp"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#EEEEEE"/>
+
+                <TextView
+                    android:id="@+id/menuLanguage"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:gravity="center_vertical"
+                    android:text="🌐  언어"
+                    android:paddingStart="10dp"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#EEEEEE"/>
+
+                <TextView
+                    android:id="@+id/menuSupport"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:gravity="center_vertical"
+                    android:text="🎧  고객센터"
+                    android:paddingStart="10dp"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#EEEEEE"/>
+
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
