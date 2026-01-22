@@ -5,10 +5,11 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 
-class DBHelper(context: Context) : SQLiteOpenHelper(context, "ShortBook.db", null, 8) {
-
-    // 테이블 생성
+// 데이터베이스 관리 클래스
+class DBHelper(context: Context) : SQLiteOpenHelper(context, "ShortBook.db", null, 13) {
+    // 테이블 생성 루틴
     override fun onCreate(db: SQLiteDatabase) {
+        // 도서 및 문장 정보 테이블
         db.execSQL("CREATE TABLE Books (" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 "title TEXT, " +
@@ -20,16 +21,94 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "ShortBook.db", nul
                 "review TEXT, " +
                 "startdate TEXT, " +
                 "enddate TEXT, " +
+                "record_date TEXT, " +
                 "is_reading INTEGER DEFAULT 0, " +
                 "is_favorite INTEGER DEFAULT 0)")
+
+        // 사용자 계정 정보 테이블
+        db.execSQL("CREATE TABLE users (email TEXT PRIMARY KEY, pw TEXT, name TEXT)")
     }
 
+    // 데이터베이스 버전 업데이트 처리
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
         db.execSQL("DROP TABLE IF EXISTS Books")
+        db.execSQL("DROP TABLE IF EXISTS users")
         onCreate(db)
     }
 
-    // 문장 수집 데이터 조회
+    /**
+     * 사용자 계정 관련 함수 (추가 영역)
+     */
+
+    // 회원가입: 유저 정보 저장 (JoinFragment 에러 해결)
+    fun insertUser(email: String, pw: String, name: String): Boolean {
+        val db = this.writableDatabase
+        val values = ContentValues().apply {
+            put("email", email)
+            put("pw", pw)
+            put("name", name)
+        }
+        return db.insert("users", null, values) != -1L
+    }
+
+    // 로그인: 정보 일치 확인
+    fun checkUser(email: String, pw: String): Boolean {
+        val db = this.readableDatabase
+        val cursor = db.rawQuery("SELECT * FROM users WHERE email=? AND pw=?", arrayOf(email, pw))
+        val exists = cursor.count > 0
+        cursor.close()
+        return exists
+    }
+
+    // 이름 조회: 이메일로 가입된 이름 가져오기
+    fun getUserName(email: String): String {
+        val db = this.readableDatabase
+        val cursor = db.rawQuery("SELECT name FROM users WHERE email=?", arrayOf(email))
+        var name = ""
+        if (cursor.moveToFirst()) {
+            name = cursor.getString(0)
+        }
+        cursor.close()
+        return name
+    }
+
+    // 비밀번호 실제 업데이트 함수
+    fun updatePassword(email: String, newPw: String): Boolean {
+        val db = this.writableDatabase
+        val values = ContentValues().apply {
+            put("pw", newPw) // 비밀번호 컬럼 수정
+        }
+
+        // 이메일이 일치하는 행의 비밀번호를 변경
+        val result = db.update("users", values, "email=?", arrayOf(email))
+        db.close()
+        return result > 0 // 수정된 행이 있으면 true 반환
+    }
+
+    // 기존 비밀번호가 맞는지 확인하는 함수 (변경 전 검증용)
+    fun checkCurrentPassword(email: String, currentPw: String): Boolean {
+        val db = this.readableDatabase
+        val cursor = db.rawQuery("SELECT * FROM users WHERE email=? AND pw=?", arrayOf(email, currentPw))
+        val exists = cursor.count > 0
+        cursor.close()
+        return exists
+    }
+
+    // 특정 날짜(yyyy-MM-dd)에 문장이 등록되어 있는지 확인하는 함수
+    fun hasDataAtDate(date: String): Boolean {
+        val db = this.readableDatabase
+        // startdate 대신 record_date에서 날짜가 일치하는지 확인
+        val cursor = db.rawQuery("SELECT * FROM Books WHERE record_date = ?", arrayOf(date))
+        val exists = cursor.count > 0
+        cursor.close()
+        return exists
+    }
+
+    /**
+     * 기존 도서 및 문장 관리 함수
+     */
+
+    // 문장 수집 데이터 조회 (content 존재 기준)
     fun getSentenceData(): List<BookItem> {
         val list = mutableListOf<BookItem>()
         val db = readableDatabase
@@ -42,7 +121,7 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "ShortBook.db", nul
         return list
     }
 
-    // 모든 도서 데이터 조회
+    // 모든 도서 데이터 조회 (중복 제거)
     fun getAllBooks(): List<BookItem> {
         val list = mutableListOf<BookItem>()
         val db = readableDatabase
@@ -55,7 +134,7 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "ShortBook.db", nul
         return list
     }
 
-    // 커서 데이터 객체 변환
+    // 커서 데이터를 BookItem 객체로 변환
     private fun cursorToBookItem(cursor: android.database.Cursor): BookItem {
         return BookItem(
             id = cursor.getInt(cursor.getColumnIndexOrThrow("id")),
@@ -73,8 +152,8 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "ShortBook.db", nul
         )
     }
 
-    // 카드 데이터 저장
-    fun addCard(content: String, title: String, author: String, link: String, comment: String, image: String) {
+    // 문장 카드 데이터 저장
+    fun addCard(content: String, title: String, author: String, link: String, comment: String, image: String, recordDate: String) {
         val db = this.writableDatabase
         val values = ContentValues().apply {
             put("content", content)
@@ -83,13 +162,14 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "ShortBook.db", nul
             put("link", link)
             put("comment", comment)
             put("image", image)
+            put("record_date", recordDate)
             put("is_favorite", 0)
         }
         db.insert("Books", null, values)
         db.close()
     }
 
-    // 도서 데이터 저장
+    // 도서 기록 데이터 저장
     fun addBook(title: String, author: String, startdate: String, enddate: String,
                 isReading: Int, review: String, image: String) {
         val db = this.writableDatabase
@@ -106,7 +186,7 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "ShortBook.db", nul
         db.close()
     }
 
-    // 즐겨찾기 상태 반전 업데이트
+    // 즐겨찾기 상태 토글 업데이트
     fun updateStarStatus(id: Int): Int {
         val db = this.writableDatabase
         var newStatus = 0
@@ -121,14 +201,14 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "ShortBook.db", nul
         return newStatus
     }
 
-    // 즐겨찾기 특정 상태 업데이트
+    // 즐겨찾기 특정 상태로 강제 업데이트
     fun updateStarStatus(id: Int, status: Int) {
         val db = this.writableDatabase
         db.execSQL("UPDATE Books SET is_favorite = $status WHERE id = $id")
         db.close()
     }
 
-    // 전체 문장 리스트 조회
+    // 전체 문장 리스트 조회 (SentenceItem 변환)
     fun getAllSentences(): List<SentenceItem> {
         val list = mutableListOf<SentenceItem>()
         val db = readableDatabase
@@ -149,7 +229,7 @@ class DBHelper(context: Context) : SQLiteOpenHelper(context, "ShortBook.db", nul
         return list
     }
 
-    // 즐겨찾기 문장 목록 조회
+    // 즐겨찾기 표시된 문장만 조회
     fun getStarredSentences(): MutableList<SentenceItem> {
         val list = mutableListOf<SentenceItem>()
         val db = readableDatabase

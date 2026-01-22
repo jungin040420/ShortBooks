@@ -1,11 +1,106 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#FFFFFF">
+
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:text="마이페이지 화면입니다"
-        android:textSize="20sp" />
-</FrameLayout>
+        android:gravity="center"
+        android:padding="20dp"
+        android:text="마이페이지"
+        android:textColor="#000000"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="24dp">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <TextView
+                        android:id="@+id/tvUserName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="책먹는 여우 님"
+                        android:textColor="#000000"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <Button
+                    android:id="@+id/btnLogout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:text="로그아웃"
+                    style="?android:attr/borderlessButtonStyle"
+                    android:textColor="#666666" />
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:padding="10dp">
+
+                <TextView
+                    android:id="@+id/tvCalendarHeader"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="2026년 1월"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="#000000" />
+            </LinearLayout>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:cardBackgroundColor="#F8F8F8"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="0dp">
+
+                <com.kizitonwose.calendar.view.CalendarView
+                    android:id="@+id/calendarView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cv_dayViewResource="@layout/calendar_day_layout" />
+            </androidx.cardview.widget.CardView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:orientation="vertical">
+
+                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#EEEEEE"/>
+                <TextView android:id="@+id/menuSettings" android:layout_width="match_parent" android:layout_height="60dp" android:gravity="center_vertical" android:text="⚙️  내 정보" />
+                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#EEEEEE"/>
+                <TextView android:id="@+id/menuLanguage" android:layout_width="match_parent" android:layout_height="60dp" android:gravity="center_vertical" android:text="🌐  언어" />
+                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#EEEEEE"/>
+                <TextView android:id="@+id/menuSupport" android:layout_width="match_parent" android:layout_height="60dp" android:gravity="center_vertical" android:text="🎧  고객센터" />
+                <View android:layout_width="match_parent" android:layout_height="1dp" android:background="#EEEEEE"/>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>
