@@ -66,7 +66,7 @@ class AddBookActivity : AppCompatActivity() {
 
             if (title.isNotEmpty()) {
                 val dbHelper = DBHelper(this)
-                // 도서 등록 함수 호출 (작성하신 DBHelper의 함수 형식에 맞춤)
+                // 도서 등록 함수 호출
                 dbHelper.addBook(title, author, startDate, endDate, isReading, review, selectedImageUrl)
 
                 Toast.makeText(this, "등록 완료", Toast.LENGTH_SHORT).show()

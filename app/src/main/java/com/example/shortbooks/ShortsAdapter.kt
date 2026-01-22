@@ -59,10 +59,14 @@ class ShortsAdapter(private val list: List<BookItem>, private val db: DBHelper) 
 
         // 즐겨찾기 상태 변경 및 DB 업데이트
         holder.btnFavorite.setOnClickListener {
-            val newStatus = if (item.isFavorite == 0) 1 else 0
-            db.updateFavorite(item.id, newStatus)
+            // 1. DB 업데이트 및 바뀐 결과 수신
+            val updatedStatus = db.updateStarStatus(item.id)
 
-            if (newStatus == 1) {
+            // 2. 데이터 모델 동기화
+            item.isFavorite = updatedStatus
+
+            // 3. UI 아이콘 즉시 변경
+            if (updatedStatus == 1) {
                 holder.btnFavorite.setImageResource(R.drawable.ic_blackstar)
             } else {
                 holder.btnFavorite.setImageResource(R.drawable.ic_star)
