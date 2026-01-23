@@ -112,7 +112,10 @@ class MyPageFragment : Fragment(R.layout.fragment_mypage) {
         val dialogView = layoutInflater.inflate(R.layout.layout_language_selection, null)
         bottomSheet.setContentView(dialogView)
 
-        // 다이얼로그 내 UI 요소 참조
+        // 저장소 참조 (설정 값 저장 및 로드를 위함)
+        val sharedPref = requireActivity().getSharedPreferences("UserPrefs", Context.MODE_PRIVATE)
+
+        // UI 요소 참조
         val btnKorean = dialogView.findViewById<View>(R.id.btnKorean)
         val btnEnglish = dialogView.findViewById<View>(R.id.btnEnglish)
         val btnJapanese = dialogView.findViewById<View>(R.id.btnJapanese)
@@ -120,11 +123,15 @@ class MyPageFragment : Fragment(R.layout.fragment_mypage) {
         val tvEnglish = dialogView.findViewById<TextView>(R.id.tvEnglish)
         val tvJapanese = dialogView.findViewById<TextView>(R.id.tvJapanese)
 
-        // 선택 언어에 따른 UI 상태 업데이트 함수
+        // UI 상태 업데이트 및 데이터 저장 함수
         fun updateSelection(selected: String) {
             val selectedBg = R.drawable.bg_language_selected
             val unselectedBg = R.drawable.bg_language_unselected
 
+            // 1. 선택한 언어 코드 저장
+            sharedPref.edit().putString("selected_language", selected).apply()
+
+            // 2. UI 하이라이트 반영
             btnKorean.setBackgroundResource(if (selected == "ko") selectedBg else unselectedBg)
             tvKorean.setTextColor(if (selected == "ko") Color.WHITE else Color.BLACK)
 
@@ -135,7 +142,11 @@ class MyPageFragment : Fragment(R.layout.fragment_mypage) {
             tvJapanese.setTextColor(if (selected == "ja") Color.WHITE else Color.BLACK)
         }
 
-        // 언어별 클릭 이벤트 연결
+        // 다이얼로그가 열릴 때 기존에 저장된 언어 값을 가져와서 초기 UI 설정
+        val currentLanguage = sharedPref.getString("selected_language", "ko") ?: "ko"
+        updateSelection(currentLanguage)
+
+        // 각 버튼 클릭 시 데이터 저장 및 UI 갱신
         btnKorean.setOnClickListener { updateSelection("ko") }
         btnEnglish.setOnClickListener { updateSelection("en") }
         btnJapanese.setOnClickListener { updateSelection("ja") }
