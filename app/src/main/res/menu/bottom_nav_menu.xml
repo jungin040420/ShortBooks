@@ -15,4 +15,5 @@
         android:id="@+id/menu_mypage"
         android:icon="@drawable/ic_profile"
         android:title="마이페이지" />
+
 </menu>

@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
  */
 class LibraryFragment : Fragment(R.layout.fragment_library) {
 
+    // UI 객체 및 DB 헬퍼 선언
     private lateinit var dbHelper: DBHelper
     private lateinit var bookAdapter: BookAdapter
     private lateinit var recyclerView: RecyclerView
@@ -24,20 +25,22 @@ class LibraryFragment : Fragment(R.layout.fragment_library) {
         // DB 헬퍼 초기화
         dbHelper = DBHelper(requireContext())
 
-        // 리사이클러뷰 참조 및 격자 레이아웃(3열) 설정
+        // 리사이클러뷰 참조 및 레이아웃(3열 그리드) 설정
         recyclerView = view.findViewById(R.id.rv_library)
         recyclerView.layoutManager = GridLayoutManager(context, 3)
 
-        // 메뉴 아이콘 클릭 시 리스트 메뉴 표시
+        // 메뉴 아이콘 참조
         val ivMenu = view.findViewById<ImageView>(R.id.iv_menu)
-        // LibraryFragment.kt 내 ivMenu 클릭 리스너
+
+        // 팝업 메뉴 설정 및 클릭 이벤트
         ivMenu.setOnClickListener { v ->
             val popup = PopupMenu(requireContext(), v)
             popup.menuInflater.inflate(R.menu.menu_library, popup.menu)
+
+            // 메뉴 항목별 액션 처리 (내 문장 화면 이동)
             popup.setOnMenuItemClickListener { item ->
                 when (item.itemId) {
                     R.id.action_my_sentences -> {
-                        // 내 문장 액티비티로 이동
                         val intent = Intent(requireContext(), MySentencesActivity::class.java)
                         startActivity(intent)
                         true
@@ -48,38 +51,35 @@ class LibraryFragment : Fragment(R.layout.fragment_library) {
             popup.show()
         }
 
-        // 도서 추가 버튼 설정
+        // 도서 추가 버튼 참조 및 클릭 이벤트 (도서 추가 화면 이동)
         val btnAdd = view.findViewById<View>(R.id.btn_add_book)
         btnAdd.setOnClickListener {
             val intent = Intent(requireContext(), AddBookActivity::class.java)
             startActivity(intent)
         }
 
-        // 초기 데이터 로드
+        // 초기 데이터 로드 및 UI 반영
         refreshBooks()
     }
 
-    /**
-     * 화면이 다시 보일 때마다 도서 목록 새로고침
-     */
+    // 화면 복귀 시 도서 목록 최신화
     override fun onResume() {
         super.onResume()
         refreshBooks()
     }
 
     /**
-     * 도서 전용 데이터를 로드하여 어댑터 갱신
+     * 도서 데이터 로드 및 어댑터 갱신
      */
     private fun refreshBooks() {
-        // [수정] getAllData 대신 도서 전용 함수인 getAllBooks 사용
-        // 이로써 문장만 추가된 데이터가 서재에 중복으로 뜨는 현상 방지
+        // DB 내 도서 목록 추출 (중복 제거 데이터)
         val bookList = dbHelper.getAllBooks()
 
-        // 어댑터 생성 및 연결
+        // 어댑터 초기화 및 데이터 연결
         bookAdapter = BookAdapter(bookList)
         recyclerView.adapter = bookAdapter
 
-        // 데이터 변경 알림
+        // UI 갱신 알림
         bookAdapter.notifyDataSetChanged()
     }
 }

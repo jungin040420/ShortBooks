@@ -23,6 +23,7 @@
         android:gravity="center"
         android:orientation="horizontal"
         android:background="@drawable/bg_language_selected">
+
         <TextView
             android:id="@+id/tvKorean"
             android:layout_width="wrap_content"
@@ -41,6 +42,7 @@
         android:gravity="center"
         android:orientation="horizontal"
         android:background="@drawable/bg_language_unselected">
+
         <TextView
             android:id="@+id/tvEnglish"
             android:layout_width="wrap_content"
@@ -49,6 +51,7 @@
             android:textSize="16sp"
             android:textColor="#000000"
             android:gravity="center" />
+
     </LinearLayout>
 
     <LinearLayout
@@ -59,6 +62,7 @@
         android:gravity="center"
         android:orientation="horizontal"
         android:background="@drawable/bg_language_unselected">
+
         <TextView
             android:id="@+id/tvJapanese"
             android:layout_width="wrap_content"
@@ -67,5 +71,7 @@
             android:textSize="16sp"
             android:textColor="#000000"
             android:gravity="center" />
+
     </LinearLayout>
+
 </LinearLayout>

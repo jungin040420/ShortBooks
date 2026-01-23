@@ -18,7 +18,7 @@ import retrofit2.converter.gson.GsonConverterFactory
  */
 class AddBookActivity : AppCompatActivity() {
 
-    private var selectedImageUrl = "" // 이미지 URL 저장 변수
+    private var selectedImageUrl = "" // 이미지 URL 저장
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,7 +46,7 @@ class AddBookActivity : AppCompatActivity() {
             true
         }
 
-        // 2. 돋보기 버튼 클릭 시 검색
+        // 네이버 검색창 이벤트 설정 (돋보기 버튼 클릭 시 검색)
         ivSearchIcon.setOnClickListener {
             val query = etSearch.text.toString().trim()
             if (query.isNotEmpty()) {
@@ -55,6 +55,7 @@ class AddBookActivity : AppCompatActivity() {
                 Toast.makeText(this, "검색어를 입력해주세요.", Toast.LENGTH_SHORT).show()
             }
         }
+
         // 2. 완료 버튼 클릭 리스너 (DB 저장 로직)
         btnComplete.setOnClickListener {
             val title = etTitle.text.toString()
@@ -98,6 +99,7 @@ class AddBookActivity : AppCompatActivity() {
                     // 첫 번째 검색 결과만 가져옴
                     val book = response.body()?.items?.firstOrNull()
                     book?.let {
+
                         // 제목, 저자 필드 자동 채우기
                         findViewById<EditText>(R.id.et_title).setText(it.title)
                         findViewById<EditText>(R.id.et_author).setText(it.author)

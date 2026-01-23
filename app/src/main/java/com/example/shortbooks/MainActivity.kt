@@ -10,23 +10,26 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        // 하단 네비게이션 바 참조
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_navigation)
 
-        // 네비게이션 아이템 선택 리스너 설정
+        // 네비게이션 아이템 선택 리스너 (프래그먼트 교체 로직)
         bottomNav.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.menu_text -> {
+                    // 문장 수집(Collection) 화면 전환
                     supportFragmentManager.beginTransaction()
                         .replace(R.id.fragment_container, CollectionFragment()).commit()
                     true
                 }
                 R.id.menu_library -> {
-                    // '내 서재' 클릭 시 LibraryFragment로 이동
+                    // 내 서재(Library) 화면 전환
                     supportFragmentManager.beginTransaction()
                         .replace(R.id.fragment_container, LibraryFragment()).commit()
                     true
                 }
                 R.id.menu_mypage -> {
+                    // 마이페이지(MyPage) 화면 전환
                     supportFragmentManager.beginTransaction()
                         .replace(R.id.fragment_container, MyPageFragment()).commit()
                     true
@@ -35,23 +38,27 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        // [추가된 로직] MySentencesActivity에서 '내 서재'로 돌아올 때 처리
+        // 인텐트 데이터 수신 (이동 목표 확인)
         val target = intent.getStringExtra("target")
+
         if (target == "library") {
-            // 인텐트로 "library" 신호가 오면 바로 내 서재 탭을 선택합니다.
+            // 특정 화면 호출 시 '내 서재' 탭 강제 선택
             bottomNav.selectedItemId = R.id.menu_library
         } else if (savedInstanceState == null) {
-            // 앱이 처음 실행될 때만 기본 탭(메인)을 선택합니다.
+            // 앱 최초 실행 시 기본 탭(문장 수집) 설정
             bottomNav.selectedItemId = R.id.menu_text
         }
     }
 
-    // [참고] 내 문장에서 돌아올 때 MainActivity가 이미 켜져 있다면 이 함수가 호출됩니다.
+    // 액티비티 재호출 시 인텐트 처리 (싱글탑 대응)
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
+        // 새 인텐트 설정
         setIntent(intent)
+
         val target = intent.getStringExtra("target")
         if (target == "library") {
+            // '내 서재' 탭으로 화면 갱신
             val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_navigation)
             bottomNav.selectedItemId = R.id.menu_library
         }

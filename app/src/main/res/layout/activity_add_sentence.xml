@@ -18,6 +18,7 @@
             android:textColor="#333333"
             android:textSize="18sp"
             android:textStyle="bold" />
+
     </RelativeLayout>
 
     <View
@@ -146,6 +147,7 @@
                 android:background="#EEEEEE" />
 
         </LinearLayout>
+
     </ScrollView>
 
 </RelativeLayout>

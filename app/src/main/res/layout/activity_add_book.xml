@@ -32,6 +32,7 @@
                 android:textColor="#000000"
                 android:padding="5dp"
                 android:textStyle="bold" />
+
         </RelativeLayout>
 
         <FrameLayout
@@ -53,6 +54,7 @@
                 android:layout_height="30dp"
                 android:layout_gravity="center"
                 android:src="@android:drawable/ic_input_add" />
+
         </FrameLayout>
 
         <LinearLayout
@@ -82,6 +84,7 @@
                 android:src="@android:drawable/ic_menu_search"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="검색 아이콘" />
+
         </LinearLayout>
 
         <LinearLayout
@@ -102,6 +105,7 @@
                 android:layout_height="wrap_content"
                 android:background="@null"
                 android:hint="제목 입력" />
+
         </LinearLayout>
 
         <LinearLayout
@@ -129,17 +133,20 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:paddingTop="20dp">
+
             <TextView
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:text="시작 일자"
                 android:textStyle="bold"/>
+
             <EditText
                 android:id="@+id/et_start_date"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@null"
                 android:hint="2026.01.15" />
+
         </LinearLayout>
 
         <LinearLayout
@@ -147,17 +154,20 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:paddingTop="20dp">
+
             <TextView
                 android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:text="완료 일자"
                 android:textStyle="bold"/>
+
             <EditText
                 android:id="@+id/et_end_date"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@null"
                 android:hint="2026.01.18" />
+
         </LinearLayout>
 
         <LinearLayout
@@ -198,4 +208,5 @@
             android:padding="10dp" />
 
     </LinearLayout>
+
 </ScrollView>
