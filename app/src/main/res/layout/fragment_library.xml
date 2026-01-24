@@ -18,7 +18,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:text="내 책장"
-            android:textColor="#000000"
+            android:textColor="#333333"
             android:textSize="18sp"
             android:textStyle="bold" />
 
