@@ -152,6 +152,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@null"
+                android:textColor="#333333"
                 android:hint="20XX.XX.XX" />
 
         </LinearLayout>
