@@ -25,7 +25,7 @@ class MyInfoFragment : Fragment(R.layout.fragment_my_info) {
         val savedEmail = sharedPref.getString("user_email", "로그인 정보 없음")
 
         // UI 텍스트 업데이트 (이메일 표시)
-        binding.tvUserEmail.text = "$savedEmail (인증됨)"
+        binding.tvUserEmail.text = "$savedEmail"
 
         // 비밀번호 변경 화면 전환 (프래그먼트 교체)
         binding.menuChangePw.setOnClickListener {
