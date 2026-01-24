@@ -75,13 +75,17 @@ class ShortsAdapter(private val list: List<BookItem>, private val db: DBHelper) 
 
         // 구매 버튼 클릭 이벤트 (외부 브라우저 연결)
         holder.btnBuy.setOnClickListener {
-            if (!item.link.isNullOrEmpty()) {
-                // 웹 링크 인텐트 실행
-                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(item.link))
+            // 네이버 도서 API에서 가져온 link 값이 있는지 확인
+            val bookLink = item.link
+
+            if (!bookLink.isNullOrEmpty()) {
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(bookLink))
                 holder.itemView.context.startActivity(intent)
             } else {
-                // 링크 누락 안내 메시지
-                Toast.makeText(holder.itemView.context, "구매 링크가 없습니다.", Toast.LENGTH_SHORT).show()
+                // 링크가 없을 경우 제목으로 네이버 쇼핑 검색결과 페이지 생성
+                val searchQuery = "https://search.shopping.naver.com/search/all?query=${item.title}"
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(searchQuery))
+                holder.itemView.context.startActivity(intent)
             }
         }
     }

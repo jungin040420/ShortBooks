@@ -48,7 +48,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
-                android:text="guru2teamC1@gmail.com (인증됨)"
+                android:text="guru2teamC1@gmail.com"
                 android:textColor="#888888"
                 android:textSize="14sp" />
 
