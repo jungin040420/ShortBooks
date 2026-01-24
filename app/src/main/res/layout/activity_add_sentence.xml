@@ -68,6 +68,7 @@
                 android:layout_height="50dp"
                 android:background="@null"
                 android:hint="노인과 바다"
+                android:textColor="#333333"
                 android:inputType="text"
                 android:textColorHint="#CCCCCC" />
 
@@ -90,6 +91,7 @@
                 android:layout_height="50dp"
                 android:background="@null"
                 android:hint="56pg"
+                android:textColor="#333333"
                 android:inputType="text"
                 android:textColorHint="#CCCCCC" />
 
@@ -113,7 +115,8 @@
                 android:minHeight="100dp"
                 android:background="@null"
                 android:gravity="top"
-                android:hint="바다는 비에 젖지 않는다."
+                android:hint="좋아하는 책의 구절을 적어보세요."
+                android:textColor="#333333"
                 android:textColorHint="#CCCCCC"
                 android:lineSpacingExtra="4dp" />
 
@@ -137,7 +140,8 @@
                 android:minHeight="100dp"
                 android:background="@null"
                 android:gravity="top"
-                android:hint="바다는 비에 젖지 않는다."
+                android:hint="한줄평을 적어주세요."
+                android:textColor="#333333"
                 android:textColorHint="#CCCCCC"
                 android:lineSpacingExtra="4dp" />
 
